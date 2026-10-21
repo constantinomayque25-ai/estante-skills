@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Biblioteca de skills</title>
+<meta name="theme-color" content="#3a2414">
+<link rel="manifest" href="estante.webmanifest">
+<link rel="icon" type="image/png" href="estante-icon-192.png">
+<link rel="apple-touch-icon" href="estante-icon-192.png">
+<style>
+  :root { --latao:#c9a24b; --papel:#fbf6ea; --tinta:#2b2118; --ok:#6fcf8a; --done:#6fcf8a; --late:#ff7a6b; color-scheme:dark;
+    --couro:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    --veio:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='60'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='.012 .35' numOctaves='3'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .7 0'/></filter><rect width='100%' height='100%' filter='url(%23w)'/></svg>"); }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; padding:34px 18px 80px; color:#f5ecda; letter-spacing:.005em;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif; -webkit-font-smoothing:antialiased;
+    background:radial-gradient(700px 480px at 12% -5%, rgba(214,132,60,.35), transparent 62%), radial-gradient(640px 460px at 95% 8%, rgba(150,70,110,.28), transparent 60%),
+      radial-gradient(800px 600px at 50% 110%, rgba(60,80,140,.25), transparent 65%), linear-gradient(#1d120b,#0d0704) fixed; }
+  main.janela { max-width:1040px; margin:0 auto; padding:30px; border-radius:22px; border:1px solid rgba(255,255,255,.13);
+    background:linear-gradient(rgba(255,255,255,.07),rgba(255,255,255,.025)); -webkit-backdrop-filter:blur(30px) saturate(170%); backdrop-filter:blur(30px) saturate(170%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16), 0 30px 80px rgba(0,0,0,.6), 0 2px 6px rgba(0,0,0,.4); }
+  h1 { font:700 2.5rem "New York",ui-serif,Georgia,"Times New Roman",serif; letter-spacing:-.015em; margin:0 0 4px; text-shadow:0 2px 10px rgba(0,0,0,.5); }
+  .sub { margin:0; color:#d3bf9a; }
+  .marca { display:flex; align-items:center; gap:16px; margin-bottom:22px; } .marca h1 { margin:0 0 4px; }
+  .marca svg { width:64px; height:64px; flex:none; filter:drop-shadow(0 4px 10px rgba(0,0,0,.55)); }
+  button, select, input, textarea { font:inherit; } button { cursor:pointer; border:0; border-radius:11px; transition:transform .12s, filter .12s; }
+  button:active { transform:scale(.97); } button:hover { filter:brightness(1.08); }
+  :focus-visible { outline:3px solid #f0c75e; outline-offset:2px; }
+  .barra { display:flex; flex-wrap:wrap; gap:9px; align-items:center; margin-bottom:12px; padding:9px; border-radius:15px;
+    background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.09); box-shadow:inset 0 1px 0 rgba(255,255,255,.06); }
+  .busca { position:relative; flex:1 1 180px; } .busca svg { position:absolute; left:11px; top:50%; transform:translateY(-50%); width:16px; height:16px; opacity:.6; }
+  .busca input[type=search] { width:100%; padding:10px 12px 10px 36px; }
+  input[type=search], select { padding:10px 12px; border:1px solid rgba(255,255,255,.14); border-radius:11px; background:rgba(255,255,255,.08); color:#f5ecda; }
+  select option { background:#2a1a10; }
+  .pri { padding:10px 18px; background:linear-gradient(#efc96a,#c9a24b); color:#2b1b0d; font-weight:700; box-shadow:0 1px 0 rgba(255,255,255,.5) inset, 0 2px 0 #8a6a25, 0 6px 14px rgba(0,0,0,.35); }
+  .sec { padding:10px 16px; background:rgba(0,0,0,.08); color:inherit; }
+  .sec2 { padding:10px 14px; background:rgba(255,255,255,.1); color:#f5ecda; border:1px solid rgba(255,255,255,.12); }
+  .perigo { padding:10px 12px; background:transparent; color:#b3261e; }
+  #aviso { height:1.3em; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; margin:0 0 10px; font-size:.92rem; color:var(--ok); }
+  .placa { display:block; width:fit-content; min-width:280px; max-width:100%; height:104px; overflow:hidden; display:flex; align-items:center; margin:0 0 26px; padding:10px 18px; border-radius:11px; color:#2b1b0d; font-size:.93rem; line-height:1.35;
+    background:linear-gradient(#f2d98f,#c9a24b); box-shadow:inset 0 1px 0 rgba(255,255,255,.55), 0 2px 0 #8a6a25, 0 8px 18px rgba(0,0,0,.45); }
+  .placa .pt { min-width:0; display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden; }
+  .placa b { font-family:"New York",ui-serif,Georgia,serif; } .placa i { opacity:.7; }
+  #estante { padding-bottom:6px; }
+  .slot { position:relative; flex:none; }
+  .slot:hover { z-index:5; }
+  .prateleira { position:relative; display:flex; align-items:flex-end; gap:4px; padding:0 22px; min-height:300px; margin-bottom:34px; border-radius:8px 8px 0 0;
+    background:radial-gradient(520px 260px at 50% 0, rgba(255,190,110,.2), transparent 70%), repeating-linear-gradient(90deg, rgba(255,255,255,.02) 0 140px, rgba(0,0,0,.22) 140px 142px), linear-gradient(#1b0f08,#2b190d);
+    box-shadow:inset 0 14px 30px rgba(0,0,0,.7), inset 14px 0 22px rgba(0,0,0,.5), inset -14px 0 22px rgba(0,0,0,.5); }
+  .prateleira::after { content:""; position:absolute; left:-12px; right:-12px; bottom:-20px; height:20px; border-radius:4px;
+    background:var(--veio), linear-gradient(#b3814f 0,#7b5030 45%,#4d311a 100%); box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 14px 20px rgba(0,0,0,.6); }
+  .vazia { align-self:center; margin:0 auto; color:#a28a66; font-family:"New York",ui-serif,Georgia,serif; font-style:italic; text-align:center; padding:0 20px; }
+  .lv { position:absolute; inset:0; width:100%; height:100%; border:0; padding:0; border-radius:4px 4px 2px 2px; transform-origin:50% 100%; overflow:visible;
+    background:var(--couro), linear-gradient(90deg, rgba(255,255,255,.2), rgba(255,255,255,.03) 18%, transparent 55%, rgba(0,0,0,.34)), linear-gradient(rgba(255,255,255,.1), transparent 14%, transparent 90%, rgba(0,0,0,.28)), var(--cor);
+    box-shadow:inset 2px 0 0 rgba(255,255,255,.14), inset -2px 0 0 rgba(0,0,0,.25), 3px 0 5px rgba(0,0,0,.5), 0 6px 8px rgba(0,0,0,.45);
+    transition:transform .28s cubic-bezier(.2,.9,.3,1.25), box-shadow .28s, filter .28s; }
+  .slot:hover + .slot > .lv, .slot:has(> .lv:focus-visible) + .slot > .lv { transform:translateX(12px); }
+  .slot:has(+ .slot:hover) > .lv, .slot:has(+ .slot > .lv:focus-visible) > .lv { transform:translateX(-12px); }
+  .slot:hover > .lv, .lv:focus-visible { transform:perspective(900px) translateY(-30px) translateZ(60px) rotateX(-8deg) rotateZ(-1.5deg) scale(1.04); z-index:5; filter:brightness(1.14) saturate(1.1);
+    box-shadow:inset 2px 0 0 rgba(255,255,255,.18), 0 26px 30px rgba(0,0,0,.65), 0 0 28px rgba(255,200,120,.18); }
+  .faixa { position:absolute; left:-1px; right:-1px; height:5px; background:linear-gradient(#f7e09a,#c9a24b 55%,#8f6a22); box-shadow:0 1px 1px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.5); }
+  .lt { position:absolute; left:0; right:0; top:38px; bottom:42px; display:flex; align-items:center; justify-content:center; overflow:hidden; padding:0 2px;
+    writing-mode:vertical-rl; transform:rotate(180deg); white-space:nowrap; font:700 .8rem "New York",ui-serif,Georgia,"Times New Roman",serif; letter-spacing:.03em;
+    background:linear-gradient(#fff4cf,#e8c46b 45%,#b78b2f); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 1px 0 rgba(0,0,0,.6)); }
+  .marcador { position:absolute; top:-6px; right:8px; width:12px; height:32px; background:linear-gradient(#f0594b,#b92e22); clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%); filter:drop-shadow(0 2px 2px rgba(0,0,0,.5)); }
+  .aviso-lv { position:absolute; bottom:24px; left:0; right:0; text-align:center; font-size:.85rem; color:#ffd24a; text-shadow:0 1px 1px #000; }
+  .cont { margin:8px 0 0; color:#ab946e; font-size:.9rem; }
+  dialog { width:min(940px,95vw); max-height:92vh; border:0; border-radius:16px; padding:0; background:var(--papel); color:var(--tinta); box-shadow:0 30px 90px rgba(0,0,0,.65); animation:abre .28s cubic-bezier(.2,.9,.3,1.15); }
+  @keyframes abre { from { opacity:0; transform:scale(.92) translateY(16px); } }
+  dialog::backdrop { background:rgba(10,5,2,.62); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
+  .corpo { display:grid; grid-template-columns:1fr 1fr; background:linear-gradient(90deg,#f1e8d2 0%,#fbf6ea 46%,#d6c6a3 50%,#fbf6ea 54%,#f1e8d2 100%); max-height:92vh; }
+  .pagina { padding:26px; display:flex; flex-direction:column; gap:12px; max-height:92vh; overflow:auto; }
+  .pagina h2 { margin:0; font:700 1.7rem "New York",ui-serif,Georgia,serif; }
+  .linha { display:flex; flex-wrap:wrap; gap:8px; }
+  label { font-size:.82rem; color:#6b5a45; display:block; margin-bottom:4px; }
+  textarea { width:100%; min-height:76px; resize:vertical; padding:10px 12px; border:1px solid rgba(0,0,0,.18); border-radius:10px; background:rgba(255,255,255,.6); color:var(--tinta); }
+  pre { margin:0; padding:12px; background:rgba(0,0,0,.06); border-radius:10px; font-size:.8rem; white-space:pre-wrap; overflow-wrap:anywhere; max-height:340px; overflow:auto; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+  .selos { display:flex; flex-wrap:wrap; gap:6px; } .selo { font-size:.75rem; padding:2px 9px; border-radius:999px; background:rgba(0,0,0,.08); color:#5b4b38; }
+  .selo.ok { color:#1d7a3b; background:rgba(40,160,80,.14); } .selo.alerta { color:#b3470f; background:rgba(230,120,40,.16); font-weight:600; }
+  .aviso-cod { padding:10px 12px; border-radius:10px; background:rgba(230,120,40,.16); color:#7a3508; font-size:.9rem; }
+  pre.desc-orig { max-height:300px; font-family:inherit; font-size:.9rem; line-height:1.4; }
+  ul.arqs { margin:0; padding-left:18px; font-size:.85rem; color:#5b4b38; }
+  .secao { width:fit-content; margin:0 0 14px 22px; padding:5px 16px; border-radius:8px; color:#2b1b0d; font:700 .78rem -apple-system,"Segoe UI",system-ui,sans-serif; letter-spacing:.09em; text-transform:uppercase;
+    background:linear-gradient(#f2d98f,#c9a24b); box-shadow:inset 0 1px 0 rgba(255,255,255,.55), 0 2px 0 #8a6a25, 0 6px 12px rgba(0,0,0,.4); }
+  .pagina select { width:100%; padding:10px 12px; border:1px solid rgba(0,0,0,.18); border-radius:10px; background:rgba(255,255,255,.6); color:var(--tinta); }
+  .pagina select option { background:#fff; color:#2b2118; }
+  @media (max-width:640px) { #aviso { height:2.7em; white-space:normal; } .corpo { grid-template-columns:1fr; background:var(--papel); overflow:auto; } .pagina { max-height:none; } h1 { font-size:1.9rem; } main.janela { padding:18px; } }
+  @media (prefers-reduced-motion: reduce) { .lv, dialog, button { transition:none; animation:none; } }
+</style>
+</head>
+<body>
+<main class="janela">
+  <div class="marca"><svg viewBox="0 0 512 512" aria-hidden="true"><defs><linearGradient id="lgE" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5a33"/><stop offset="1" stop-color="#26160c"/></linearGradient><linearGradient id="lgP" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8c46b"/><stop offset="1" stop-color="#b78b2f"/></linearGradient></defs><rect width="512" height="512" rx="115" fill="url(#lgE)"/><rect x="115" y="164" width="54" height="205" rx="6" fill="rgb(192, 80, 63)"/><rect x="172" y="210" width="44" height="159" rx="6" fill="rgb(47, 122, 160)"/><rect x="220" y="138" width="59" height="230" rx="6" fill="rgb(63, 154, 98)"/><rect x="284" y="189" width="49" height="179" rx="6" fill="rgb(138, 90, 176)"/><rect x="338" y="154" width="44" height="215" rx="6" fill="rgb(216, 154, 58)"/><rect x="67" y="369" width="379" height="31" rx="4" fill="url(#lgP)"/></svg><div><h1>Biblioteca de skills</h1>
+  <p class="sub">Passe o mouse nos livros. Clique em um para abrir, retirar ou copiar.</p></div></div>
+
+  <div class="barra">
+    <button class="pri" id="importar" type="button">Trazer livros</button>
+    <input type="file" id="pasta" webkitdirectory multiple hidden>
+    <div class="busca"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4.5 4.5"/></svg>
+      <input type="search" id="busca" placeholder="Procurar um livro" aria-label="Buscar skills"></div>
+    <select id="filtro" aria-label="Filtrar">
+      <option value="todas">Todos os livros</option><option value="fav">Com marcador</option>
+      <option value="texto">Só texto (sem código)</option><option value="codigo">Com código</option>
+    </select>
+    <select id="organizar" aria-label="Organizar a estante">
+      <option value="cat">Organizar por categoria</option><option value="az">Ordem alfabética</option>
+    </select>
+  </div>
+  <p id="aviso" role="status"></p>
+  <div class="placa" id="placa" aria-live="polite">Passe o mouse sobre um livro da estante.</div>
+  <div id="estante"></div>
+  <p class="cont" id="contagem"></p>
+</main>
+
+<dialog id="det"><div class="corpo" id="detCorpo"></div></dialog>
+
+<script>
+  const $ = id => document.getElementById(id);
+  const CODIGO = /\.(py|sh|bash|js|mjs|cjs|ts|ps1|bat|cmd|rb|pl|php|exe|dll|jar)$/i;
+  let skills = [], atual = null;
+
+  // ---- armazenamento (IndexedDB, só neste navegador) ----
+  const BD = {
+    abrir() { return new Promise((ok, no) => { const r = indexedDB.open("biblioteca-skills", 1);
+      r.onupgradeneeded = () => r.result.createObjectStore("s", { keyPath: "id" }); r.onsuccess = () => ok(r.result); r.onerror = () => no(r.error); }); },
+    async tudo() { const db = await this.abrir(); return new Promise(ok => { const q = db.transaction("s").objectStore("s").getAll(); q.onsuccess = () => ok(q.result); q.onerror = () => ok([]); }); },
+    async gravar(s) { const db = await this.abrir(); return new Promise(ok => { const t = db.transaction("s", "readwrite"); t.objectStore("s").put(s); t.oncomplete = () => ok(true); t.onerror = t.onabort = () => ok(false); }); },
+    async apagar(id) { const db = await this.abrir(); return new Promise(ok => { const t = db.transaction("s", "readwrite"); t.objectStore("s").delete(id); t.oncomplete = () => ok(true); t.onerror = () => ok(false); }); }
+  };
+  const aviso = (m, erro) => { const a = $("aviso"); a.textContent = m; a.style.color = erro ? "var(--late)" : "var(--done)"; setTimeout(() => { a.textContent = ""; }, 6000); };
+
+  // ---- leitura do cabeçalho (name e description) ----
+  function frontmatter(t) {
+    const m = t.replace(/^\uFEFF/, "").match(/^---\r?\n([\s\S]*?)\r?\n---/), o = {}; if (!m) return o;
+    const ls = m[1].split(/\r?\n/);
+    for (let i = 0; i < ls.length; i++) {
+      const k = ls[i].match(/^([\w-]+):\s*(.*)$/); if (!k) continue; let v = k[2];
+      if (/^[>|]-?$/.test(v)) { const p = []; while (i + 1 < ls.length && /^\s+/.test(ls[i + 1])) p.push(ls[++i].trim()); v = p.join(" "); }
+      o[k[1]] = v.replace(/^(["'])([\s\S]*)\1$/, "$2");
+    }
+    return o;
+  }
+  function comDescricao(texto, desc) {
+    const m = texto.match(/^---\r?\n([\s\S]*?)\r?\n---/); if (!m) return texto;
+    const nova = 'description: "' + desc.replace(/\s+/g, " ").trim().replace(/\\/g, "\\\\").replace(/"/g, '\\"') + '"';
+    const ls = m[1].split(/\r?\n/), out = [];
+    for (let i = 0; i < ls.length; i++) {
+      if (/^description:/.test(ls[i])) { out.push(nova); if (/^description:\s*[>|]/.test(ls[i])) while (i + 1 < ls.length && /^\s+/.test(ls[i + 1])) i++; }
+      else out.push(ls[i]);
+    }
+    return texto.replace(m[1], () => out.join("\n"));
+  }
+
+  // ---- gerador de ZIP (sem compressão, sem bibliotecas externas) ----
+  const CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; }
+    return b => { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = t[(c ^ b[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }; })();
+  function criarZip(arqs) {
+    const enc = new TextEncoder(), partes = [], central = []; let off = 0;
+    const d = new Date(), hora = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1), data = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+    arqs.forEach(a => {
+      const nome = enc.encode(a.nome), crc = CRC(a.dados), n = a.dados.length;
+      const lh = new DataView(new ArrayBuffer(30));
+      lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, 20, true); lh.setUint16(6, 0x0800, true); lh.setUint16(10, hora, true); lh.setUint16(12, data, true);
+      lh.setUint32(14, crc, true); lh.setUint32(18, n, true); lh.setUint32(22, n, true); lh.setUint16(26, nome.length, true);
+      partes.push(new Uint8Array(lh.buffer), nome, a.dados);
+      const ch = new DataView(new ArrayBuffer(46));
+      ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 20, true); ch.setUint16(6, 20, true); ch.setUint16(8, 0x0800, true); ch.setUint16(12, hora, true); ch.setUint16(14, data, true);
+      ch.setUint32(16, crc, true); ch.setUint32(20, n, true); ch.setUint32(24, n, true); ch.setUint16(28, nome.length, true); ch.setUint32(42, off, true);
+      central.push(new Uint8Array(ch.buffer), nome); off += 30 + nome.length + n;
+    });
+    const tam = central.reduce((s, p) => s + p.length, 0), fim = new DataView(new ArrayBuffer(22));
+    fim.setUint32(0, 0x06054b50, true); fim.setUint16(8, arqs.length, true); fim.setUint16(10, arqs.length, true); fim.setUint32(12, tam, true); fim.setUint32(16, off, true);
+    return new Blob([...partes, ...central, new Uint8Array(fim.buffer)], { type: "application/zip" });
+  }
+
+  // ---- importar uma pasta ----
+  $("importar").onclick = () => $("pasta").click();
+  $("pasta").onchange = async e => {
+    const todos = [...e.target.files].filter(f => !/(^|\/)(\.git|node_modules)\//.test(f.webkitRelativePath));
+    const pastas = new Set();
+    todos.forEach(f => { const p = f.webkitRelativePath; if (p.split("/").pop() === "SKILL.md") pastas.add(p.slice(0, p.lastIndexOf("/"))); });
+    if (!pastas.size) { aviso("Não achei nenhum arquivo SKILL.md nessa pasta. Escolha a pasta que contém as pastas das skills.", true); e.target.value = ""; return; }
+    let n = 0;
+    for (const dir of pastas) {
+      const arqs = [];
+      for (const f of todos.filter(f => f.webkitRelativePath.startsWith(dir + "/"))) arqs.push({ caminho: f.webkitRelativePath.slice(dir.length + 1), dados: await f.arrayBuffer() });
+      const texto = new TextDecoder().decode(arqs.find(a => a.caminho === "SKILL.md").dados), fm = frontmatter(texto);
+      const nome = fm.name || dir.split("/").pop(), antes = skills.find(s => s.id === nome) || {};
+      if (await BD.gravar({ id: nome, nome, descricao: fm.description || "", texto, arquivos: arqs, favorita: !!antes.favorita, descCustom: antes.descCustom || "", descPt: antes.descPt || "", categoria: antes.categoria || "", origem: dir })) n++;
+    }
+    e.target.value = ""; skills = await BD.tudo(); desenhar(); aviso(n + " skills importadas. Nada foi enviado para a internet.");
+  };
+
+  const temCodigo = s => s.arquivos.some(a => CODIGO.test(a.caminho) || /^(scripts|hooks)\//.test(a.caminho));
+
+  const CORES = ["#7b2d26", "#2f4f6f", "#35563d", "#5b3a6e", "#8a5a2b", "#2b5b5e", "#6e2f4a", "#4a4a2e", "#3b3f6e", "#8c3b1f"];
+  const hash = t => { let x = 0; for (const c of t) x = (x * 31 + c.charCodeAt(0)) >>> 0; return x; };
+  const dim = s => { const k = hash(s.id); return { w: 46 + (k % 30), h: 206 + ((k >>> 5) % 52), cor: CORES[(k >>> 3) % CORES.length] }; };
+  const PADRAO = "Passe o mouse sobre um livro da estante.";
+  let _pl;
+
+  // ---- categorias (prateleiras): classificação automática por palavras-chave, com correção manual ----
+  const SECOES = [
+    { nome: "Planejamento e ideias", re: /\b(plan|specs?\b|specification|idea|interview|requirement|brainstorm|roadmap|scope|discover|refine|planej|ideia|requisit|escopo|entrevist)/g },
+    { nome: "Programação", re: /\b(code|coding|test|tdd|debug|refactor|git|commit|build|backend|typescript|python|javascript|deploy|cli\b|program|develop|c[óo]digo|desenvolv|api|error)/g },
+    { nome: "Design e interface", re: /\b(design|ui\b|ux\b|css|layout|frontend|visual|theme|canvas|brand|art\b|style|estilo|tema|identidade)/g },
+    { nome: "Documentos e arquivos", re: /\b(docx|docs?\b|pdf|pptx|xlsx|word|spreadsheet|presentation|document|slides|excel|powerpoint|planilha|apresenta|arquivo)/g },
+    { nome: "Qualidade e segurança", re: /\b(secur|review|quality|harden|audit|vulnerab|perform|optimiz|lint|seguran|revis|qualidade|desempenho)/g },
+    { nome: "Pesquisa e dados", re: /\b(research|data|analy|search|scrap|dataset|statistic|pesquis|dados|an[áa]lise)/g },
+    { nome: "Automação e conexões", re: /\b(mcp|server|integrat|automat|workflow|slack|webhook|agent|schedul|cron|integra|fluxo)/g },
+    { nome: "Escrita e comunicação", re: /\b(writ|coauthor|communic|email|comms|blog|content|copy|escrit|comunica|conte[úu]do|texto)/g }
+  ];
+  const NOMES = SECOES.map(c => c.nome).concat("Outros");
+  function auto(s) {
+    const nome = s.nome.toLowerCase().replace(/[^a-zà-ú0-9]+/g, " "), desc = (s.descricao || "").toLowerCase();
+    let melhor = "Outros", pontos = 0;
+    SECOES.forEach(c => {
+      const p = 4 * (nome.match(c.re) || []).length + Math.min(6, (desc.match(c.re) || []).length);
+      if (p > pontos) { pontos = p; melhor = c.nome; }
+    });
+    return melhor;
+  }
+  const catDe = s => (s.categoria && NOMES.includes(s.categoria)) ? s.categoria : auto(s);
+
+  function desenhar() {
+    const q = $("busca").value.toLowerCase().trim(), f = $("filtro").value, box = $("estante"); box.innerHTML = "";
+    const v = skills.filter(s => (!q || (s.nome + " " + s.descricao + " " + catDe(s)).toLowerCase().includes(q)) &&
+      (f === "todas" || (f === "fav" && s.favorita) || (f === "texto" && !temCodigo(s)) || (f === "codigo" && temCodigo(s)))).sort((a, b) => a.nome.localeCompare(b.nome));
+    $("contagem").textContent = skills.length ? v.length + " de " + skills.length + " livros na estante" : "";
+    if (!v.length) {
+      const p = el("div", "prateleira"); p.appendChild(el("p", "vazia", skills.length ? "Nenhum livro com esse filtro." : "A estante está vazia. Clique em “Trazer livros” e escolha a pasta biblioteca-skills (ou a pasta skills de um repositório baixado)."));
+      box.appendChild(p); return;
+    }
+    const montar = lista => {
+    const larg = Math.max(280, box.clientWidth - 44); let linhas = [[]], soma = 0;
+    lista.forEach(s => { const w = dim(s).w + 3; if (soma + w > larg && linhas[linhas.length - 1].length) { linhas.push([]); soma = 0; } linhas[linhas.length - 1].push(s); soma += w; });
+    linhas.forEach(l => {
+      const prat = el("div", "prateleira");
+      l.forEach(s => {
+        const d = dim(s), slot = el("div", "slot"), b = el("button", "lv"); slot.style.width = d.w + "px"; slot.style.height = d.h + "px"; b.type = "button"; b.style.setProperty("--cor", d.cor);
+        b.setAttribute("aria-label", s.nome + (temCodigo(s) ? ". Contém código." : ". Só texto."));
+        [16, 25].forEach(t => { const x = el("i", "faixa"); x.style.top = t + "px"; b.appendChild(x); });
+        const x = el("i", "faixa"); x.style.bottom = "16px"; b.appendChild(x);
+        b.appendChild(el("span", "lt", s.nome.length > 17 ? s.nome.slice(0, 16) + "…" : s.nome));
+        if (s.favorita) b.appendChild(el("i", "marcador"));
+        if (temCodigo(s)) b.appendChild(el("span", "aviso-lv", "⚠"));
+        const mostra = () => { clearTimeout(_pl); const pl = $("placa"); pl.textContent = ""; const d = s.descPt || s.descricao || "sem descrição", longo = d.length > 200;
+          const t = el("span", "pt"); t.append(el("b", "", s.nome), " — " + (longo ? d.slice(0, 197).replace(/\s+\S*$/, "") + "…" : d));
+          if (longo) t.append(el("i", "", "  (abra o livro para ler tudo)")); if (!s.descPt && s.descricao) t.append(el("i", "", "  (sem tradução ainda)")); if (temCodigo(s)) t.append("  ⚠ contém código"); pl.appendChild(t); };
+        slot.onmouseenter = mostra; b.onfocus = mostra; slot.onmouseleave = b.onblur = () => { clearTimeout(_pl); _pl = setTimeout(() => { $("placa").textContent = PADRAO; }, 220); };
+        slot.onclick = () => abrir(s.id); slot.appendChild(b); prat.appendChild(slot);
+      });
+      box.appendChild(prat);
+    });
+    };
+    if ($("organizar").value === "az") montar(v);
+    else NOMES.forEach(n => { const g = v.filter(s => catDe(s) === n); if (!g.length) return;
+      box.appendChild(el("div", "secao", n + " · " + g.length + (g.length === 1 ? " livro" : " livros"))); montar(g); });
+  }
+  let _t; window.addEventListener("resize", () => { clearTimeout(_t); _t = setTimeout(desenhar, 150); });
+  $("busca").oninput = desenhar; $("filtro").onchange = desenhar; $("organizar").onchange = desenhar;
+
+  // ---- detalhe de uma skill ----
+  function copiar(txt) {
+    const ok = () => aviso("Texto copiado. Cole numa conversa com Ctrl + V.");
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(txt).then(ok, () => antigo(txt, ok)); else antigo(txt, ok);
+  }
+  function antigo(txt, ok) { const t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); ok(); } catch (e) { aviso("Não consegui copiar. Selecione o texto na caixa e copie com Ctrl + C.", true); } t.remove(); }
+  const el = (tag, cls, txt) => { const x = document.createElement(tag); if (cls) x.className = cls; if (txt !== undefined) x.textContent = txt; return x; };
+
+  function abrir(id) {
+    atual = skills.find(s => s.id === id); if (!atual) return;
+    const s = atual, c = $("detCorpo"); c.innerHTML = "";
+    const esq = el("div", "pagina"), dir = el("div", "pagina");
+    esq.appendChild(el("h2", "", s.nome));
+    const selos = el("div", "selos"); selos.appendChild(el("span", "selo", "Origem: " + s.origem));
+    selos.appendChild(el("span", "selo " + (temCodigo(s) ? "alerta" : "ok"), temCodigo(s) ? "Contém código" : "Só texto")); esq.appendChild(selos);
+    if (temCodigo(s)) esq.appendChild(el("div", "aviso-cod", "Este livro tem arquivos de código (scripts). Eles podem executar ações no seu computador ou no ambiente do Claude. Leia todos antes de instalar."));
+
+    esq.append(el("label", "", "Descrição original, completa (em inglês)"), el("pre", "desc-orig", s.descricao || "(sem descrição)"));
+    const ta = el("textarea"); ta.maxLength = 200;
+    ta.value = s.descCustom || (s.descricao.length <= 200 ? s.descricao : s.descricao.slice(0, 197).replace(/\s+\S*$/, "") + "...");
+    const cont = el("label", "", ""); const att = () => { cont.textContent = ta.value.length + " / 200"; }; ta.oninput = att; att();
+    esq.append(el("label", "", "Descrição que o Claude vai ler (máx. 200 caracteres no Claude.ai)"), ta, cont);
+
+    const l = el("div", "linha");
+    const bz = el("button", "pri", "Retirar para o Claude (ZIP)"); bz.autofocus = true;
+    bz.onclick = async () => {
+      s.descCustom = ta.value.trim(); await BD.gravar(s);
+      const enc = new TextEncoder(), lista = s.arquivos.map(a => ({ nome: s.nome + "/" + a.caminho,
+        dados: a.caminho === "SKILL.md" && s.descCustom ? enc.encode(comDescricao(s.texto, s.descCustom)) : new Uint8Array(a.dados) }));
+      const url = URL.createObjectURL(criarZip(lista)), a = document.createElement("a"); a.href = url; a.download = s.nome + ".zip"; a.click(); URL.revokeObjectURL(url);
+      aviso("Livro retirado: " + s.nome + ".zip. No Claude: Configurações, Capacidades, Skills, Upload skill.");
+    };
+    const bc = el("button", "sec", "Copiar texto"); bc.onclick = () => copiar(s.texto);
+    const bf = el("button", "sec", s.favorita ? "★ Com marcador" : "☆ Pôr marcador"); bf.onclick = async () => { s.favorita = !s.favorita; await BD.gravar(s); bf.textContent = s.favorita ? "★ Com marcador" : "☆ Pôr marcador"; desenhar(); };
+    const br = el("button", "perigo", "Descartar da estante"); br.onclick = async () => { if (confirm("Descartar " + s.nome + " da estante? Os arquivos originais no seu computador não são apagados.")) { await BD.apagar(s.id); skills = await BD.tudo(); $("det").close(); desenhar(); } };
+    const bx = el("button", "sec", "Devolver à estante"); bx.onclick = () => $("det").close();
+    l.append(bz, bc, bf, bx, br); esq.appendChild(l);
+
+    const tp = el("textarea"); tp.value = s.descPt || ""; tp.placeholder = "Escreva aqui a descrição em português. Não vai no ZIP.";
+    tp.onchange = async () => { s.descPt = tp.value.trim(); await BD.gravar(s); aviso("Tradução salva. Passe o mouse no livro para ver."); };
+    esq.insertBefore(el("label", "", "Sua tradução em português (aparece ao passar o mouse; só para mim)"), l); esq.insertBefore(tp, l);
+
+    const sc = el("select"); sc.add(new Option("Automática: " + auto(s), "")); NOMES.forEach(n => sc.add(new Option(n, n))); sc.value = s.categoria || "";
+    sc.onchange = async () => { s.categoria = sc.value; await BD.gravar(s); desenhar(); aviso("Livro na prateleira: " + catDe(s)); };
+    esq.insertBefore(el("label", "", "Prateleira (categoria)"), l); esq.insertBefore(sc, l);
+
+    dir.appendChild(el("label", "", "Arquivos do livro (" + s.arquivos.length + ")"));
+    const ul = el("ul", "arqs"); s.arquivos.forEach(a => ul.appendChild(el("li", "", a.caminho))); dir.appendChild(ul);
+    dir.appendChild(el("label", "", "Conteúdo do SKILL.md")); dir.appendChild(el("pre", "", s.texto));
+    c.append(esq, dir); $("det").showModal();
+  }
+
+  BD.tudo().then(r => { skills = r; desenhar(); }).catch(() => { desenhar(); aviso("Este navegador não permitiu guardar a biblioteca. Tente abrir o arquivo no Chrome.", true); });
+</script>
+</body>
+</html>
