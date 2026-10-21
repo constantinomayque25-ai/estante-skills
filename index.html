@@ -181,15 +181,16 @@
     const pastas = new Set();
     todos.forEach(f => { const p = f.webkitRelativePath; if (p.split("/").pop() === "SKILL.md") pastas.add(p.slice(0, p.lastIndexOf("/"))); });
     if (!pastas.size) { aviso("Não achei nenhum arquivo SKILL.md nessa pasta. Escolha a pasta que contém as pastas das skills.", true); e.target.value = ""; return; }
-    let n = 0;
+    let n = 0, trocados = 0;
     for (const dir of pastas) {
       const arqs = [];
       for (const f of todos.filter(f => f.webkitRelativePath.startsWith(dir + "/"))) arqs.push({ caminho: f.webkitRelativePath.slice(dir.length + 1), dados: await f.arrayBuffer() });
       const texto = new TextDecoder().decode(arqs.find(a => a.caminho === "SKILL.md").dados), fm = frontmatter(texto);
       const nome = fm.name || dir.split("/").pop(), antes = skills.find(s => s.id === nome) || {};
+      if (antes.texto && antes.texto !== texto) trocados++;
       if (await BD.gravar({ id: nome, nome, descricao: fm.description || "", texto, arquivos: arqs, favorita: !!antes.favorita, descCustom: antes.descCustom || "", descPt: antes.descPt || "", categoria: antes.categoria || "", origem: dir })) n++;
     }
-    e.target.value = ""; skills = await BD.tudo(); desenhar(); aviso(n + " skills importadas. Nada foi enviado para a internet.");
+    e.target.value = ""; skills = await BD.tudo(); desenhar(); aviso(n + " skills importadas" + (trocados ? "; " + trocados + " substituíram um livro de mesmo nome e conteúdo diferente" : "") + ". Nada foi enviado para a internet.", trocados > 0);
   };
 
   const temCodigo = s => s.arquivos.some(a => CODIGO.test(a.caminho) || /^(scripts|hooks)\//.test(a.caminho));
@@ -207,13 +208,16 @@
     { nome: "Design e interface", re: /\b(design|ui\b|ux\b|css|layout|frontend|visual|theme|canvas|brand|art\b|style|estilo|tema|identidade)/g },
     { nome: "Documentos e arquivos", re: /\b(docx|docs?\b|pdf|pptx|xlsx|word|spreadsheet|presentation|document|slides|excel|powerpoint|planilha|apresenta|arquivo)/g },
     { nome: "Qualidade e segurança", re: /\b(secur|review|quality|harden|audit|vulnerab|perform|optimiz|lint|seguran|revis|qualidade|desempenho)/g },
-    { nome: "Pesquisa e dados", re: /\b(research|data|analy|search|scrap|dataset|statistic|pesquis|dados|an[áa]lise)/g },
+    { nome: "Marketing e SEO", re: /\b(seo|marketing|cro\b|ads?\b|advertis|campaign|conversion|funnel|growth|brand|social|email|newsletter|copywrit|landing|pricing|launch|influenc|affiliate|referral|analytics|keyword|backlink|schema|sitemap|serp|ppc|youtube|instagram|tiktok|linkedin|twitter|reddit|abtest|competitor|anúncio|anuncio|vendas)/g },
+    { nome: "Ciência e pesquisa", re: /\b(scien|bio|chem|genom|protein|clinical|drug|pharma|physics|astro|molecul|cell|gene|neuro|medic|ecolog|quantum|pubmed|uniprot|proteom|seq|rna|dna|omics|spectr|dicom|imaging|statistic|ciênc|cienc|laborat)/g },
+    { nome: "Pesquisa e dados", re: /\b(research|data|analy|search|scrap|dataset|statistic|forecast|time series|regress|pesquis|dados|an[áa]lise)/g },
     { nome: "Automação e conexões", re: /\b(mcp|server|integrat|automat|workflow|slack|webhook|agent|schedul|cron|integra|fluxo)/g },
     { nome: "Escrita e comunicação", re: /\b(writ|coauthor|communic|email|comms|blog|content|copy|escrit|comunica|conte[úu]do|texto)/g }
   ];
   const NOMES = SECOES.map(c => c.nome).concat("Outros");
   function auto(s) {
-    const nome = s.nome.toLowerCase().replace(/[^a-zà-ú0-9]+/g, " "), desc = (s.descricao || "").toLowerCase();
+    const ab = t => t.replace(/\ba\/?b[ -]?test/g, "abtest");
+    const nome = ab(s.nome.toLowerCase().replace(/[^a-zà-ú0-9]+/g, " ")), desc = ab((s.descricao || "").toLowerCase());
     let melhor = "Outros", pontos = 0;
     SECOES.forEach(c => {
       const p = 4 * (nome.match(c.re) || []).length + Math.min(6, (desc.match(c.re) || []).length);
